@@ -14,6 +14,8 @@ This module implements easily adding custom character sheet sections.
 ## Usage
 To define a custom section for an item, open the item sheet and input the custom section name on the details. All items with the same custom section will be organized together.
 
+<img src="/img/ccss.png">
+
 
 ## Compatibility
 ### Systems

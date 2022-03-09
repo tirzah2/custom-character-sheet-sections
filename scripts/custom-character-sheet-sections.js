@@ -9,6 +9,16 @@ Hooks.once("ready", () => {
 
 
 Hooks.on("renderItemSheet", (app, html, appData) => {
+    const custom2 = `
+        <div class="form-group" style="border: 1px solid var(--faint-color); border-radius: 5px; flex-direction: column;">
+            <label>${game.i18n.localize(`${moduleName}.customSection`)}</label>
+            <input style="text-align: left;" type="text" name="flags.${moduleName}.sectionName" value="${app.object.data.flags[moduleName]?.sectionName || ""}" />
+        </div>
+    `;
+    html.find(`div.item-properties`).append(custom2);
+
+    return;
+
     // Inject input element into Item sheets to input custom section name
     const customSectionInput = `
         <h3 class="form-header">${game.i18n.localize(`${moduleName}.customSection`)}</h3>
@@ -19,6 +29,7 @@ Hooks.on("renderItemSheet", (app, html, appData) => {
             </div>
         </div>
     `;
+
     html.find(`div.tab.details`).append(customSectionInput);
 });
 

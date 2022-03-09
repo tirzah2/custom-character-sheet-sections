@@ -16,7 +16,7 @@ To define a custom section for an item, open the item sheet and input the custom
 
 Only Feature-type items and items in the inventory tab will be affected. Class-subtype Feature items will not be affected.
 
-<img src="/img/ccss.png">
+<img src="/img/ccss-2.png">
 
 
 ## Compatibility

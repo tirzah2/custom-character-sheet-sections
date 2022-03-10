@@ -72,13 +72,15 @@ function customSectionGetData(wrapped) {
     // Call wrapped function to get appData
     const data = wrapped();
     
-    // Loop for both Feature items and Inventory items
-    for (const type of ["features", "inventory"]) {
+    // Loop for Feature-type items, Inventory items, and Spell-type items
+    for (const type of ["features", "inventory", "spellbook"]) {
+        const itemsSpells = type === "spellbook" ? "spells" : "items";
+
         // Create array containing all items of current type
         const items = data[type].reduce((acc, current) => {
             if (current.isclass) return acc;
-    
-            return acc.concat(current.items);
+
+            return acc.concat(current[itemsSpells]);
         }, []);
 
         
@@ -92,14 +94,14 @@ function customSectionGetData(wrapped) {
 
         // For items flagged with a custom section, remove them from their original section
         for (const section of data[type]) {
-            section.items = section.items.filter(i => !customSectionItems.includes(i));
+            section[itemsSpells] = section[itemsSpells].filter(i => !customSectionItems.includes(i));
         }
 
         // Create new custom sections and add to parent array
         for (const customSection of customSections) {
             const newSection = {
                 label: customSection,
-                items: customSectionItems.filter(i => i.flags[moduleName].sectionName === customSection)
+                [itemsSpells]: customSectionItems.filter(i => i.flags[moduleName].sectionName === customSection)
             };
             if (type === "features") {
                 newSection.hasActions = false;
@@ -107,6 +109,15 @@ function customSectionGetData(wrapped) {
                 newSection.dataset = { type: "feat" };
             } else if (type === "inventory") {
 
+            } else if (type === "spellbook") {
+                //newSection.spells = customSectionItems.filter(i => i.flags[moduleName].sectionName === customSection);
+                newSection.canCreate = false;
+                newSection.canPrepare = true;
+                newSection.dataset = {
+                    "preparation.mode": "prepared",
+                    type: "spell"
+                };
+                newSection.usesSlots = false;
             }
 
             data[type].push(newSection);

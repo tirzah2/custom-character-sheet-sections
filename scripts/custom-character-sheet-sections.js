@@ -104,7 +104,7 @@ function customSectionGetData(wrapped) {
                 [itemsSpells]: customSectionItems.filter(i => i.flags[moduleName].sectionName === customSection)
             };
             if (type === "features") {
-                newSection.hasActions = false;
+                newSection.hasActions = true;
                 newSection.isClass = false;
                 newSection.dataset = { type: "feat" };
             } else if (type === "inventory") {

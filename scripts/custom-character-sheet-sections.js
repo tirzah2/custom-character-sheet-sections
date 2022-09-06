@@ -1,36 +1,26 @@
-import { libWrapper } from "../lib/shim.js";
-
-const moduleName = "custom-character-sheet-sections";
+const moduleID = "custom-character-sheet-sections";
 
 
 Hooks.once("ready", () => {
-    libWrapper.register(moduleName, "CONFIG.Actor.sheetClasses.character['dnd5e.ActorSheet5eCharacter'].cls.prototype.getData", customSectionGetData, "WRAPPER");
+    libWrapper.register(moduleID, "CONFIG.Actor.sheetClasses.character['dnd5e.ActorSheet5eCharacter'].cls.prototype.getData", customSectionGetData, "WRAPPER");
 });
 
 
-Hooks.on("renderItemSheet", (app, html, appData) => {
-    const custom2 = `
-        <div class="form-group" style="border: 1px solid var(--faint-color); border-radius: 5px; flex-direction: column;">
-            <label>${game.i18n.localize(`${moduleName}.customSection`)}</label>
-            <input style="text-align: left;" type="text" name="flags.${moduleName}.sectionName" value="${app.object.data.flags[moduleName]?.sectionName || ""}" />
-        </div>
+Hooks.on("renderItemSheet", (app, [html], appData) => {
+    const customSectionInput = document.createElement('div');
+    customSectionInput.classList.add('form-group');
+    customSectionInput.style.cssText = `
+        border: 1px solid var(--faint-color);
+        border-radius: 5px;
+        flex-direction: column;
     `;
-    html.find(`div.item-properties`).append(custom2);
+    customSectionInput.innerHTML = `
+        <label>${game.i18n.localize(`${moduleID}.customSection`)}</label>
+        <input style="text-align: left;" type="text" name="flags.${moduleID}.sectionName" value="${app.object.flags[moduleID]?.sectionName || ""}" />
+    `;
+    html.querySelector(`div.item-properties`).appendChild(customSectionInput);
 
     return;
-
-    // Inject input element into Item sheets to input custom section name
-    const customSectionInput = `
-        <h3 class="form-header">${game.i18n.localize(`${moduleName}.customSection`)}</h3>
-        <div class="form-group">
-            <label>${game.i18n.localize(`${moduleName}.sectionName`)}</label>
-            <div class="form-fields">
-                <input type="text" name="flags.${moduleName}.sectionName" value="${app.object.data.flags[moduleName]?.sectionName || ""}" />
-            </div>
-        </div>
-    `;
-
-    html.find(`div.tab.details`).append(customSectionInput);
 });
 
 Hooks.on("renderActorSheet5eCharacter", (app, html, appData) => {
@@ -46,31 +36,18 @@ Hooks.on("renderActorSheet5eCharacter", (app, html, appData) => {
         const prevItem = app.object.items.get(prevItemLi?.data("itemId"));
 
         const item = firstItem || prevItem;
-        const customSectionName = item?.getFlag(moduleName, "sectionName");
+        const customSectionName = item?.getFlag(moduleID, "sectionName");
         if (!customSectionName) return;
 
         $(this).remove();
         return;
-
-        /*
-        // Add Item buttons create new item with pre-set custom section // Only works for Features; Inventory items pull a type from the header element
-        $(this).click(function(event) {
-            Hooks.once("preCreateItem", (item, data, options, userID) => {
-                item.data.update({
-                    flags: {
-                        [moduleName]: { sectionName: customSectionName }
-                    }
-                });
-            });
-        });
-        */
     });
 });
 
 
-function customSectionGetData(wrapped) {
+async function customSectionGetData(wrapped) {
     // Call wrapped function to get appData
-    const data = wrapped();
+    const data = await wrapped();
     
     // Loop for Feature-type items, Inventory items, and Spell-type items
     for (const type of ["features", "inventory", "spellbook"]) {
@@ -85,11 +62,11 @@ function customSectionGetData(wrapped) {
 
         
         // Get items flagged with a custom section
-        const customSectionItems = items.filter(i => i.flags[moduleName]?.sectionName);
+        const customSectionItems = items.filter(i => i.flags[moduleID]?.sectionName);
         // Create array of custom section names
         const customSections = [];
         for (const item of customSectionItems) {
-            if (!customSections.includes(item.flags[moduleName].sectionName)) customSections.push(item.flags[moduleName].sectionName);
+            if (!customSections.includes(item.flags[moduleID].sectionName)) customSections.push(item.flags[moduleID].sectionName);
         }
 
         // For items flagged with a custom section, remove them from their original section
@@ -101,7 +78,7 @@ function customSectionGetData(wrapped) {
         for (const customSection of customSections) {
             const newSection = {
                 label: customSection,
-                [itemsSpells]: customSectionItems.filter(i => i.flags[moduleName].sectionName === customSection)
+                [itemsSpells]: customSectionItems.filter(i => i.flags[moduleID].sectionName === customSection)
             };
             if (type === "features") {
                 newSection.hasActions = true;
@@ -110,7 +87,7 @@ function customSectionGetData(wrapped) {
             } else if (type === "inventory") {
 
             } else if (type === "spellbook") {
-                //newSection.spells = customSectionItems.filter(i => i.flags[moduleName].sectionName === customSection);
+                //newSection.spells = customSectionItems.filter(i => i.flags[moduleID].sectionName === customSection);
                 newSection.canCreate = false;
                 newSection.canPrepare = true;
                 newSection.dataset = {

@@ -18,7 +18,8 @@ Hooks.on("renderItemSheet", (app, [html], appData) => {
         <label>${game.i18n.localize(`${moduleID}.customSection`)}</label>
         <input style="text-align: left;" type="text" name="flags.${moduleID}.sectionName" value="${app.object.flags[moduleID]?.sectionName || ""}" />
     `;
-    html.querySelector(`div.item-properties`).appendChild(customSectionInput);
+    const itemProperties = html.querySelector(`div.item-properties`);
+    if (itemProperties) itemProperties.appendChild(customSectionInput);
 
     return;
 });

@@ -2,7 +2,12 @@
     "id": "custom-character-sheet-sections",
     "title": "Custom Character Sheet Sections",
     "description": "",
-    "author": "enso#0361",
+    "authors": [
+        {
+            "name": "enso",
+            "discord": "enso#0361"
+        }
+    ],
     "version": "1.0.0",
     "compatibility": {
         "minimum": "10",

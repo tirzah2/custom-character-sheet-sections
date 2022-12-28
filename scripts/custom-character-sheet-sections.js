@@ -1,6 +1,16 @@
 const moduleID = "custom-character-sheet-sections";
 
 
+Hooks.once('init', () => {
+    game.settings.register(moduleID, 'hideEmpty', {
+        name: 'Hide Empty Sections',
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false
+    });
+});
+
 Hooks.once("ready", () => {
     libWrapper.register(moduleID, "CONFIG.Actor.sheetClasses.character['dnd5e.ActorSheet5eCharacter'].cls.prototype.getData", customSectionGetData, "WRAPPER");
 });
@@ -43,6 +53,16 @@ Hooks.on("renderActorSheet5eCharacter", (app, html, appData) => {
         $(this).remove();
         return;
     });
+
+    if (game.settings.get(moduleID, 'hideEmpty')) {
+        const headers = html[0].querySelectorAll('li.items-header');
+        for (const header of headers) {
+            const ol = header.nextElementSibling;
+            if (ol.tagName !== 'OL' || ol.childElementCount) continue;
+    
+            header.remove();
+        }
+    }
 });
 
 

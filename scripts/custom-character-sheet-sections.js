@@ -15,7 +15,6 @@ Hooks.once("ready", () => {
     libWrapper.register(moduleID, "CONFIG.Actor.sheetClasses.character['dnd5e.ActorSheet5eCharacter'].cls.prototype.getData", customSectionGetData, "WRAPPER");
 });
 
-
 Hooks.on("renderItemSheet", (app, [html], appData) => {
     const customSectionInput = document.createElement('div');
     customSectionInput.classList.add('form-group');
@@ -24,10 +23,27 @@ Hooks.on("renderItemSheet", (app, [html], appData) => {
         border-radius: 5px;
         flex-direction: column;
     `;
+    
+    const options = [
+        { value: 'Foglie', label: 'Foglie' },
+        { value: 'Gemme', label: 'Gemme' }
+    ];
+    
+    const selectedValue = app.object.flags[moduleID]?.sectionName || '';
+    
+    const selectOptions = options.map(option => `
+        <option value="${option.value}" ${option.value === selectedValue ? 'selected' : ''}>
+            ${option.label}
+        </option>
+    `).join('');
+    
     customSectionInput.innerHTML = `
         <label>${game.i18n.localize(`${moduleID}.customSection`)}</label>
-        <input style="text-align: left;" type="text" name="flags.${moduleID}.sectionName" value="${app.object.flags[moduleID]?.sectionName || ""}" />
+        <select style="text-align: left;" name="flags.${moduleID}.sectionName">
+            ${selectOptions}
+        </select>
     `;
+    
     const itemProperties = html.querySelector(`div.item-properties`);
     if (itemProperties) itemProperties.appendChild(customSectionInput);
 

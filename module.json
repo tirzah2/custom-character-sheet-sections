@@ -11,7 +11,7 @@
     "version": "1.0.0",
     "compatibility": {
         "minimum": "10",
-        "verified": "11"
+        "verified": "10"
     },
     "relationships": {
         "systems": [
@@ -20,7 +20,7 @@
                 "type": "system",
                 "compatibility": {
                     "minimum": "2.0.0",
-                    "verified": "2.7.0"
+                    "verified": "2.0.0"
                 }
             }
         ],

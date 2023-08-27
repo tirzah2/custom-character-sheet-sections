@@ -1,6 +1,5 @@
 const moduleID = "custom-character-sheet-sections";
 
-
 Hooks.once('init', () => {
     game.settings.register(moduleID, 'hideEmpty', {
         name: 'Hide Empty Sections',

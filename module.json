@@ -11,7 +11,7 @@
     "version": "1.0.0",
     "compatibility": {
         "minimum": "10",
-        "verified": "10"
+        "verified": "11"
     },
     "relationships": {
         "systems": [
@@ -20,7 +20,7 @@
                 "type": "system",
                 "compatibility": {
                     "minimum": "2.0.0",
-                    "verified": "2.0.0"
+                    "verified": "2.7.0"
                 }
             }
         ],
@@ -46,6 +46,6 @@
         }
     ],
     "url": "https://github.com/jessev14/custom-character-sheet-sections",
-    "manifest": "https://github.com/jessev14/custom-character-sheet-sections/releases/latest/download/module.json",
+    "manifest": "https://github.com/tirzah2/custom-character-sheet-sections/edit/main/module.json",
     "download": "https://github.com/jessev14/custom-character-sheet-sections/releases/download/1.0.0/CCSS.zip"
 }
